@@ -1,14 +1,12 @@
-import { createStore } from 'vuex'
+import { createStore } from "vuex";
+import rootActions from "./rootActions";
+import rootGetters from "./rootGetters";
+import rootMutations from "./rootMutations";
 
 export default createStore({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
-})
+  state: {},
+  getters: rootGetters,
+  mutations: rootMutations,
+  actions: rootActions,
+  modules: {},
+});

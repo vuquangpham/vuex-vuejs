@@ -1,26 +1,108 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <TheHeader />
+  <router-view></router-view>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TheHeader from "./components/nav/TheHeader.vue";
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    TheHeader,
+  },
+  data() {
+    return {
+      isLoggedIn: false,
+      products: [
+        {
+          id: "p1",
+          image: "https://picsum.photos/200/300",
+          title: "Book Collection",
+          description:
+            "A collection of must-read books. All-time classics included!",
+          price: 99.99,
+        },
+        {
+          id: "p2",
+          image: "https://picsum.photos/200/300",
+          title: "Mountain Tent",
+          description: "A tent for the ambitious outdoor tourist.",
+          price: 129.99,
+        },
+        {
+          id: "p3",
+          image: "https://picsum.photos/200/300",
+          title: "Food Box",
+          description:
+            "May be partially expired when it arrives but at least it is cheap!",
+          price: 6.99,
+        },
+      ],
+      cart: { items: [], total: 0, qty: 0 },
+    };
+  },
+  provide() {
+    return {
+      isLoggedIn: this.isLoggedIn,
+      products: this.products,
+      cart: this.cart,
+      addProductToCart: this.addProductToCart,
+      removeProductFromCart: this.removeProductFromCart,
+      login: this.login,
+      logout: this.logout,
+    };
+  },
+  methods: {
+    addProductToCart(productData) {
+      const productInCartIndex = this.cart.items.findIndex(
+        (ci) => ci.productId === productData.id
+      );
+
+      if (productInCartIndex >= 0) {
+        this.cart.items[productInCartIndex].qty++;
+      } else {
+        const newItem = {
+          productId: productData.id,
+          title: productData.title,
+          image: productData.image,
+          price: productData.price,
+          qty: 1,
+        };
+        this.cart.items.push(newItem);
+      }
+      this.cart.qty++;
+      this.cart.total += productData.price;
+    },
+
+    removeProductFromCart(prodId) {
+      const productInCartIndex = this.cart.items.findIndex(
+        (cartItem) => cartItem.productId === prodId
+      );
+      const prodData = this.cart.items[productInCartIndex];
+      this.cart.items.splice(productInCartIndex, 1);
+      this.cart.qty -= prodData.qty;
+      this.cart.total -= prodData.price * prodData.qty;
+    },
+    login() {
+      this.isLoggedIn = true;
+    },
+    logout() {
+      this.isLoggedIn = false;
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0;
 }
 </style>
