@@ -6,7 +6,7 @@
     </h3>
     <ul>
       <cart-item
-        v-for="item in cart.items"
+        v-for="item in cartItems"
         :key="item.productId"
         :prod-id="item.productId"
         :title="item.title"
@@ -23,14 +23,16 @@ import BaseBadge from "../components/ui/BaseBadge.vue";
 import CartItem from "../components/cart/CartItem.vue";
 
 export default {
-  inject: ["cart"],
   components: {
     CartItem,
     BaseBadge,
   },
   computed: {
     cartTotal() {
-      return this.cart.total.toFixed(2);
+      return this.$store.getters["cart/totalSum"].toFixed(2);
+    },
+    cartItems() {
+      return this.$store.getters["cart/products"];
     },
   },
 };

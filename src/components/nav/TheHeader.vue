@@ -10,7 +10,7 @@
         </li>
         <li>
           <router-link to="/cart">Cart</router-link>
-          <BaseBadge mode="elegant">{{ cart.qty }}</BaseBadge>
+          <BaseBadge mode="elegant">{{ cartQuantity }}</BaseBadge>
         </li>
         <li v-if="isLoggedIn">
           <router-link to="/admin">Admin</router-link>
@@ -31,7 +31,22 @@ export default {
   components: {
     BaseBadge,
   },
-  inject: ["isLoggedIn", "login", "logout", "cart"],
+  computed: {
+    cartQuantity() {
+      return this.$store.getters["cart/quantity"];
+    },
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
+  },
+  methods: {
+    login() {
+      this.$store.dispatch("login");
+    },
+    logout() {
+      this.$store.dispatch("logout");
+    },
+  },
 };
 </script>
 
